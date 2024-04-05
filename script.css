@@ -1,6 +1,7 @@
 body{
-    background-color: #776f6f;
-}
+    background-image: url('360_F_267470518_kIk2R9WDEkBcmHN1zrMTpDz8JuSzUqt5.jpg');
+    background-size: cover;
+    background-position: center}
 
 .mapdiv{
     width:28%;
@@ -8,7 +9,7 @@ body{
 }
 
 .mapdiv path {
-    fill: #00cc9c;
+    fill: #020615;
     stroke: #ffffff;
     stroke-width:4px;
     transition: fill 0.3s;
@@ -33,10 +34,10 @@ body{
     margin-top: 0;
 }
 
-.label{
+.heading{
     padding: 30px 100px;
     font-size: 35px;
     font-weight: bold;
-    color: #130f40;
+    color: #ffffff;
     font-family:"Mongolian Baiti";
 }
