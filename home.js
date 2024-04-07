@@ -1,29 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const token = fetchLoginToken();
-    if (!token) {
-        console.error('Token not found. Please ensure you are logged in.');
-        return;
-    }
-
+    const customToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkNoZWxhbmlpQGdtYWlsLmNvbSIsImlhdCI6MTcxMjI1NjI3NX0.ZVmiOpgcWah322BmVcwf1Jb7R5lyMHPhhDxfS7hbiwU';
     const districts = document.querySelectorAll('path[name]');
+    const fetchDataAndUpdate = () => {
+        districts.forEach(district => {
+            const districtName = district.getAttribute('name');
+            fetchData(districtName, customToken);
+        });
+    };
+
+    // Refresh data every 10 seconds
+    setInterval(fetchDataAndUpdate, 10000); // 10 seconds in milliseconds
+
+    // Attach click event listeners to each district
     districts.forEach(district => {
         district.addEventListener('click', () => {
             const districtName = district.getAttribute('name');
-            fetchDataAndDisplay(districtName, token, district);
+            fetchDataAndDisplay(districtName, customToken, district);
         });
     });
 });
 
-function fetchLoginToken() {
-    return localStorage.getItem('token');
-}
-
-function fetchDataAndDisplay(districtName, token, district) {
-    const apiUrl = `https://jade-nice-deer.cyclic.app/wcast/getnonExpired?district=${districtName}`;
+function fetchData(districtName, customToken) {
+    const apiUrl = `https://calm-teal-adder-tie.cyclic.app/wcast/getData?district=${districtName}`;
 
     fetch(apiUrl, {
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${customToken}`,
             'Content-Type': 'application/json'
         }
     })
@@ -34,7 +36,29 @@ function fetchDataAndDisplay(districtName, token, district) {
             return response.json();
         })
         .then(data => {
+            // You can store the fetched data in a variable or process it further here
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+}
 
+function fetchDataAndDisplay(districtName, customToken, district) {
+    const apiUrl = `https://calm-teal-adder-tie.cyclic.app/wcast/getData?district=${districtName}`;
+
+    fetch(apiUrl, {
+        headers: {
+            'Authorization': `Bearer ${customToken}`,
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
             const existingAlertBox = document.querySelector('.alert-box');
             if (existingAlertBox) {
                 existingAlertBox.remove();
@@ -52,7 +76,7 @@ function displayWeatherData(data, districtName, district) {
     const alertBox = document.createElement('div');
     alertBox.classList.add('alert-box');
     alertBox.style.position = 'absolute';
-    alertBox.style.top = `${districtRect.top}px`;
+    alertBox.style.top = `${districtRect.top + window.scrollY}px`; // Adjust for page scroll
     alertBox.style.left = `${districtRect.left + districtRect.width}px`; // Adjust position as needed
 
     const districtEntries = data.filter(entry => entry.districtName === districtName);
