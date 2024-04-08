@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function fetchData(districtName, customToken) {
-    const apiUrl = `https://calm-teal-adder-tie.cyclic.app/wcast/getData?district=${districtName}`;
+    const apiUrl = `https://weatherapp-c9ig.onrender.com/wcast/getData?district=${districtName}`;
 
     fetch(apiUrl, {
         headers: {
